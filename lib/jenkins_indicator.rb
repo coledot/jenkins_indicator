@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require 'artoo'
 
 # usage:
@@ -8,7 +11,7 @@ require 'artoo'
 #  - arbitrary colors don't work yet because POST parameters in artoo are bugged somehow???
 
 class RGBRobot < Artoo::Robot
-  connection :arduino, :adaptor=>:firmata, :port=>'/dev/tty.usbserial-A70061BL'
+  connection :arduino, :adaptor=>:firmata, :port=>'/dev/ttyUSB0'
   device :rgb_led, { :driver => :rgb_led, :red_pin => 3, :green_pin => 5, :blue_pin => 6 }
   api :host => '127.0.0.1', :port => '3000'
 
