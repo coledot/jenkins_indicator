@@ -10,6 +10,14 @@ require 'artoo'
 #    `curl --data "" http://localhost:4321/robots/RGB_LED/devices/rgb_led/commands/red`
 #  - arbitrary colors don't work yet because POST parameters in artoo are bugged somehow???
 
+def get_arduino_dev
+  glob = '/dev/ttyUSB*'
+  devices = Dir.glob(glob)
+  throw "can't find a device file under #{glob} -- is it plugged in?" unless devices.count > 0
+  # XXX going to assume only one usb device
+  devices.first
+end
+
 class RGBRobot < Artoo::Robot
   connection :arduino, :adaptor=>:firmata, :port=>get_arduino_dev
   device :rgb_led, { :driver => :rgb_led, :red_pin => 3, :green_pin => 5, :blue_pin => 6 }
@@ -23,14 +31,6 @@ class RGBRobot < Artoo::Robot
       #
     end
   end
-end
-
-def get_arduino_dev
-  glob = '/dev/ttyUSB*'
-  devices = Dir.glob(glob)
-  throw "can't find a device file under #{glob} -- is it plugged in?" unless devices.count > 0
-  # XXX going to assume only one usb device
-  devices.first
 end
 
 robot = RGBRobot.new(name: "RGB_LED")
